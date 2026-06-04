@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bila's Emergency Care Kit 🏥✨</title>
+    <!-- Menggunakan Font Pixel Art -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #ffe5ec;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a4a4a;
+            font-size: 10px;
+            padding: 20px 10px;
+        }
+
+        /* Jendela Utama */
+        .window {
+            background-color: #fff;
+            width: 100%;
+            max-width: 400px;
+            border: 3px solid #ffb3c1;
+            border-radius: 12px;
+            box-shadow: 6px 6px 0 #ff8fa3;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Aplikasi */
+        .window-header {
+            background-color: #ffb3c1;
+            padding: 12px;
+            border-bottom: 3px solid #fff;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 0 #ff8fa3;
+            font-size: 9px;
+            letter-spacing: 1px;
+        }
+
+        /* Navigasi Tab Menu */
+        .tabs {
+            display: flex;
+            background-color: #fff5f7;
+            border-bottom: 2px solid #ffb3c1;
+        }
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 12px 5px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            cursor: pointer;
+            color: #aaa;
+            transition: 0.2s;
+            outline: none;
+        }
+        .tab-btn.active {
+            background-color: #fff;
+            color: #ff8fa3;
+            font-weight: bold;
+            border-bottom: 3px solid #ff8fa3;
+        }
+
+        /* Area Konten */
+        .window-content {
+            padding: 25px 20px;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #fffdfa;
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tombol Pixel */
+        .pixel-btn {
+            background-color: #fff;
+            color: #4a4a4a;
+            border: 2px solid #4a4a4a;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 8px;
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 #4a4a4a;
+            transition: 0.1s;
+            margin-top: 15px;
+        }
+        .pixel-btn:hover {
+            background-color: #ffe5ec;
+            box-shadow: 1px 1px 0 #4a4a4a;
+            transform: translate(2px, 2px);
+        }
+        .pixel-btn:active { transform: scale(0.95); }
+
+        /* Styling Komponen Baterai */
+        .battery-container {
+            width: 140px;
+            height: 65px;
+            border: 4px solid #4a4a4a;
+            border-radius: 8px;
+            padding: 4px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #eee;
+        }
+        .battery-container::after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            top: 18px;
+            width: 8px;
+            height: 22px;
+            background-color: #4a4a4a;
+            border-radius: 0 4px 4px 0;
+        }
+        .battery-bar {
+            height: 100%;
+            width: 10%;
+            background-color: #f44336;
+            border-radius: 3px;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+        .battery-text {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .status-msg {
+            font-size: 8px;
+            line-height: 1.6;
+            min-height: 45px;
+            margin-top: 15px;
+            color: #666;
+        }
+
+        /* Styling Komponen P3K */
+        .p3k-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .med-btn {
+            background-color: #fff;
+            border: 2px solid #ffb3c1;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            box-shadow: 3px 3px 0 #ffcbd5;
+            transition: 0.1s;
+        }
+        .med-btn:hover {
+            background-color: #fff5f7;
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0 #ffcbd5;
+        }
+        .med-icon { font-size: 16px; }
+        .popup-box {
+            margin-top: 20px;
+            padding: 12px;
+            border: 2px dashed #ff8fa3;
+            background-color: #fff5f7;
+            border-radius: 8px;
+            font-size: 8px;
+            line-height: 1.6;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Styling Komponen Pop-It */
+        .popit-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 240px;
+            margin: 15px auto;
+        }
+        .bubble {
+            width: 45px;
+            height: 45px;
+            background-color: #ffccd5;
+            border: 2px solid #ff8fa3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: inset -3px -3px 0 #ff8fa3, 2px 2px 0 #ddd;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        .bubble.popped {
+            background-color: #e0e0e0;
+            border-color: #b0b0b0;
+            box-shadow: inset 2px 2px 3px rgba(0,0,0,0.1);
+            transform: scale(0.92);
+            cursor: default;
+        }
+        .counter-box {
+            font-size: 8px;
+            margin-top: 10px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="window">
+        <!-- Header Aplikasi -->
+        <div class="window-header">
+            🏥 BILA'S CARE KIT v1.0
+        </div>
+
+        <!-- Menu Tab Atas -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-baterai')">🔋 ENERGY</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-p3k')">📦 P3K</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-popit')">🐱 POP-IT</button>
+        </div>
+
+        <!-- Konten Box -->
+        <div class="window-content">
+
+            <!-- TAB 1: BATERAI -->
+            <div id="tab-baterai" class="tab-content active">
+                <p style="font-size: 8px; color: #888;">Kondisi Energi Bila Saat Ini:</p>
+                <div class="battery-container">
+                    <div class="battery-bar" id="bat-bar"></div>
+                </div>
+                <div class="battery-text" id="bat-text">10%</div>
+                <p class="status-msg" id="bat-msg">Duh, dayamu kritis karena kecapekan kuliah... Yuk dicharge dulu! 🔥</p>
+                <button class="pixel-btn" id="btn-charge" onclick="chargeEnergy()">⚡ TAP UNTUK CHARGE</button>
+            </div>
+
+            <!-- TAB 2: P3K -->
+            <div id="tab-p3k" class="tab-content">
+                <p style="font-size: 8px; color: #888; margin-bottom: 15px;">Pilih resep obat sesuai keluhanmu aliyaa:</p>
+                <div class="p3k-grid">
+                    <button class="med-btn" onclick="bukaObat('pusing')">
+                        <span class="med-icon">💆‍♀️</span> <span>Obat Kepala Pusing</span>
+                    </button>
+                    <button class="med-btn" onclick="bukaObat('vitamin')">
+                        <span class="med-icon">💊</span> <span>Vitamin Apresiasi</span>
+                    </button>
+                    <button class="med-btn" onclick="bukaObat('teh')">
+                        <span class="med-icon">🍵</span> <span>Teh Hangat Virtual</span>
+                    </button>
+                </div>
+                <div class="popup-box" id="p3k-popup"></div>
+            </div>
+
+            <!-- TAB 3: POP-IT HEWAN LUCU -->
+            <div id="tab-popit" class="tab-content">
+                <p style="font-size: 8px; color: #888;">Pecahkan semua gelembung lucu ini sampai capekmu ilang! ✨🤖</p>
+                <div class="popit-grid">
+                    <div class="bubble" onclick="popBubble(this)">🐱</div>
+                    <div class="bubble" onclick="popBubble(this)">🐻</div>
+                    <div class="bubble" onclick="popBubble(this)">🐼</div>
+                    <div class="bubble" onclick="popBubble(this)">🐹</div>
+                    <div class="bubble" onclick="popBubble(this)">🐰</div>
+                    <div class="bubble" onclick="popBubble(this)">🦊</div>
+                    <div class="bubble" onclick="popBubble(this)">🐸</div>
+                    <div class="bubble" onclick="popBubble(this)">🐨</div>
+                    <div class="bubble" onclick="popBubble(this)">🐯</div>
+                    <div class="bubble" onclick="popBubble(this)">🦁</div>
+                    <div class="bubble" onclick="popBubble(this)">🐮</div>
+                    <div class="bubble" onclick="popBubble(this)">🐷</div>
+                    <div class="bubble" onclick="popBubble(this)">🐙</div>
+                    <div class="bubble" onclick="popBubble(this)">🐵</div>
+                    <div class="bubble" onclick="popBubble(this)">🐥</div>
+                    <div class="bubble" onclick="popBubble(this)">🐧</div>
+                </div>
+                <div class="counter-box">
+                    Gelembung Pecah: <span id="pop-count">0</span>/16
+                </div>
+                <button class="pixel-btn" style="padding: 6px 10px; font-size: 6px; margin-top: 8px;" onclick="resetPopit()">Pasang Lagi🔄</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function switchTab(evt, tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        let currentPercent = 10;
+        const batteryMessages = {
+            10: "Duh, dayamu kritis karena kecapekan kuliah... Yuk dicharge dulu! 🔥",
+            30: "Srrttt... Energi mulai masuk. Ingat ya, kamu itu manusia biasa, wajar banget kalau capek. ✨",
+            50: "Setengah jalan! Tarik napas dalem-dalem... Badannya diistirahatin dulu ya, jangan dipaksa. 🌸",
+            70: "Daya makin penuh! sabarr bentarr lagii balik ke rumahh kokk hehehe ⭐🐹",
+            90: "Dikit lagi! Kamu udah hebat banget bisa bertahan sejauh ini melewati minggu yang padat! 🧸",
+            100: "BATERAI ENERGI BILA FULLY CHARGED! 🎉 Semangatnya udah balik! Jangan lupa makan teratur, minum obat, dan tidur yang cukup ya. semangatt,kalau butuh bantuan billing ajaa alll 👍🚀✨"
+        };
+
+        function chargeEnergy() {
+            if (currentPercent >= 100) return;
+            currentPercent += 20;
+            if (currentPercent > 100) currentPercent = 100;
+
+            const bar = document.getElementById('bat-bar');
+            const text = document.getElementById('bat-text');
+            const msg = document.getElementById('bat-msg');
+
+            bar.style.width = currentPercent + '%';
+            text.innerHTML = currentPercent + '%';
+            msg.innerHTML = batteryMessages[currentPercent];
+
+            if (currentPercent <= 30) bar.style.backgroundColor = '#f44336';
+            else if (currentPercent <= 70) bar.style.backgroundColor = '#ff9800';
+            else bar.style.backgroundColor = '#4caf50';
+
+            if (currentPercent === 100) {
+                document.getElementById('btn-charge').style.display = 'none';
+            }
+        }
+
+        function bukaObat(jenis) {
+            const popup = document.getElementById('p3k-popup');
+            popup.style.display = 'block';
+
+            if (jenis === 'pusing') {
+                popup.innerHTML = "🐻 <b>[ANTI-PUSING SISTEM ACTIVATED]</b><br><br>Saran terbaik saat ini: Ikhlasin dulu urusan kuliahnya sejam dua jam, ga usah dipikir keras! Daripada pusing, mending selonjoran, merem sebentar, atau lihat video kucing lucu. Jangan sampai kodenya ikutan pusing dengerin tugas kuliahmu ya! Semangat! 🚀✨";
+            } else if (jenis === 'vitamin') {
+                popup.innerHTML = "✨ <b>[CRING! VITAMIN APRESIASI ENERGI]</b><br><br>Cuma mau ngingetin kalau kamu itu udah keren dan hebat banget! Di tengah capek, pusing, dan kondisi jauh beda kota dengan keluarga, kamu tetep berusaha lakuin yang terbaik buat kuliahmu selama ini. Proud of youu, aliyaa! 🌟🛸";
+            } else if (jenis === 'teh') {
+                popup.innerHTML = "🍵 <b>[TEH HANGAT ANTI AMBLES]</b><br><br>Ini teh anget virtual manis khusus buat nemenin kamu bedrest hari ini. Uapnya bawa ketenangan. Tapi tetep, setelah ini buruan ambil air putih asli di dekatmu terus diminum ya aliyaa! ⭐🚀";
+            }
+        }
+
+        let poppedCount = 0;
+        const defaultAnimals = ["🐱", "🐻", "🐼", "🐹", "🐰", "🦊", "🐸", "🐨", "🐯", "🦁", "🐮", "🐷", "🐙", "🐵", "🐥", "🐧"];
+
+        function playPopSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1000, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
+        function popBubble(element) {
+            if (element.classList.contains('popped')) return;
+            element.classList.add('popped');
+            element.innerHTML = "🎈";
+            playPopSound();
+            poppedCount++;
+            document.getElementById('pop-count').innerHTML = poppedCount;
+        }
+
+        function resetPopit() {
+            poppedCount = 0;
+            document.getElementById('pop-count').innerHTML = 0;
+            document.querySelectorAll('.bubble').forEach((b, i) => {
+                b.classList.remove('popped');
+                b.innerHTML = defaultAnimals[i];
+            });
+        }
+    </script>
+</body>
+</html>
