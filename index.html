@@ -32,7 +32,7 @@
             flex-direction: column;
         }
 
-        /* Header Aplikasi (REVISI JUDUL) */
+        /* Header Aplikasi */
         .window-header {
             background-color: #ffb3c1;
             padding: 12px;
@@ -233,9 +233,23 @@
             margin-top: 10px;
             color: #777;
         }
+        
+        /* Tombol Kontrol Musik */
+        .music-control {
+            font-size: 6px;
+            color: #ff8fa3;
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
+
+    <audio id="bg-music" loop>
+        <source src="musik.mp3.mpeg" type="audio/mpeg">
+    </audio>
 
     <div class="window">
         <div class="window-header">
@@ -301,12 +315,36 @@
                 </div>
                 <button class="pixel-btn" style="padding: 6px 10px; font-size: 6px; margin-top: 8px;" onclick="resetPopit()">Pasang Lagi🔄</button>
             </div>
+            
+            <div class="music-control" onclick="toggleMusic()">Matikan Musik 🎵</div>
 
         </div>
     </div>
 
     <script>
+        // Fungsi menyalakan musik pilihanmu secara aman
+        function startMusic() {
+            const music = document.getElementById('bg-music');
+            if (music.paused) {
+                music.volume = 0.3; // Volume diatur sedang (30%) agar nyaman di telinga
+                music.play().catch(e => console.log("Menunggu klik pertama pengguna..."));
+            }
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const controlBtn = document.querySelector('.music-control');
+            if (music.paused) {
+                music.play();
+                controlBtn.innerHTML = "Matikan Musik 🎵";
+            } else {
+                music.pause();
+                controlBtn.innerHTML = "Nyalakan Musik 🔇";
+            }
+        }
+
         function switchTab(evt, tabId) {
+            startMusic(); // Nyalakan musik pilihanmu saat tombol menu ditekan
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
@@ -324,6 +362,7 @@
         };
 
         function chargeEnergy() {
+            startMusic(); // Nyalakan musik saat ngecharge
             if (currentPercent >= 100) return;
             currentPercent += 20;
             if (currentPercent > 100) currentPercent = 100;
@@ -346,6 +385,7 @@
         }
 
         function bukaObat(jenis) {
+            startMusic();
             const popup = document.getElementById('p3k-popup');
             popup.style.display = 'block';
 
@@ -354,13 +394,12 @@
             } else if (jenis === 'vitamin') {
                 popup.innerHTML = "✨ <b>[CRING! VITAMIN APRESIASI ENERGI]</b><br><br>Cuma mau ngingetin kalau kamu itu udah keren dan hebat banget! Di tengah capek, pusing, dan kondisi jauh beda kota dengan keluarga, kamu tetep berusaha lakuin yang terbaik buat kuliahmu selama ini. Proud of youu, aliyaa! 🌟🛸";
             } else if (jenis === 'teh') {
-                popup.innerHTML = "🍵 <b>[TEH HANGAT ANTI AMBLES]</b><br><br>Ini teh anget virtual manis khusus buat nemenin kamu bedrest hari ini. Uapnya bawa ketenangan. Tapi tetep, setelah ini buruan ambil air whites asli di dekatmu terus diminum ya aliyaa! ⭐🚀";
+                popup.innerHTML = "🍵 <b>[TEH HANGAT ANTI AMBLES]</b><br><br>Ini teh anget virtual manis khusus buat nemenin kamu bedrest hari ini. Uapnya bawa ketenangan. Tapi tetep, setelah ini buruan ambil air putih asli di dekatmu terus diminum ya aliyaa! ⭐🚀";
             }
         }
 
         let poppedCount = 0;
         const defaultAnimals = ["🐱", "🐻", "🐼", "🐹", "🐰", "🦊", "🐸", "🐨", "🐯", "🦁", "🐮", "🐷", "🐙", "🐵", "🐥", "🐧"];
-        // Daftar ekspresi wajah lucu setelah dipecahkan (REVISI BARU)
         const happyFaces = ["😜", "😎", "🥳", "😁", "🤩", "🤪", "🤠", "🤖", "🌟", "😺", "🎉", "🚀", "🍕", "🧁", "🍩", "🎈"];
 
         function playPopSound() {
@@ -381,9 +420,9 @@
         }
 
         function popBubble(element, index) {
+            startMusic(); // Nyalakan musik saat memecahkan balon
             if (element.classList.contains('popped')) return;
             element.classList.add('popped');
-            // Mengubah menjadi ekspresi wajah lucu sesuai urutan index
             element.innerHTML = happyFaces[index];
             playPopSound();
             poppedCount++;
@@ -398,6 +437,9 @@
                 b.innerHTML = defaultAnimals[i];
             });
         }
+        
+        // Memicu musik menyala jika layar di-klik secara umum di area mana saja
+        document.body.addEventListener('click', startMusic, { once: true });
     </script>
 </body>
 </html>
